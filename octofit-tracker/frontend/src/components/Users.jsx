@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection } from '../api.js'
+import { API_BASE_URL, fetchEndpoint } from '../api.js'
 
 function Users() {
   const [users, setUsers] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchCollection('users')
+    fetchEndpoint(`${API_BASE_URL}/api/users/`)
       .then((items) => setUsers(items))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))

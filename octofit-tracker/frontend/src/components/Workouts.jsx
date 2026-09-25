@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection } from '../api.js'
+import { API_BASE_URL, fetchEndpoint } from '../api.js'
 
 function Workouts() {
   const [workouts, setWorkouts] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchCollection('workouts')
+    fetchEndpoint(`${API_BASE_URL}/api/workouts/`)
       .then((items) => setWorkouts(items))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))

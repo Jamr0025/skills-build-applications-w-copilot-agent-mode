@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection } from '../api.js'
+import { API_BASE_URL, fetchEndpoint } from '../api.js'
 
 function Leaderboard() {
   const [entries, setEntries] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchCollection('leaderboard')
+    fetchEndpoint(`${API_BASE_URL}/api/leaderboard/`)
       .then((items) => setEntries(items))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))

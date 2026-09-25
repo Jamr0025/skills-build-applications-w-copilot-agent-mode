@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection } from '../api.js'
+import { API_BASE_URL, fetchEndpoint } from '../api.js'
 
 const activityLabels = { running: 'Run', walking: 'Walk', strength: 'Strength' }
 
@@ -8,7 +8,7 @@ function Activities() {
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchCollection('activities')
+    fetchEndpoint(`${API_BASE_URL}/api/activities/`)
       .then((items) => setActivities(items))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))

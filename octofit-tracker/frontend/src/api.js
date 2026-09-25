@@ -11,10 +11,14 @@ export function normalizeCollection(payload) {
   return payload ? [payload] : []
 }
 
-export async function fetchCollection(component) {
-  const response = await fetch(`${API_BASE_URL}/api/${component}/`)
+export async function fetchEndpoint(endpoint) {
+  const response = await fetch(endpoint)
   if (!response.ok) {
-    throw new Error(`Unable to load ${component} (${response.status})`)
+    throw new Error(`Unable to load ${endpoint} (${response.status})`)
   }
   return normalizeCollection(await response.json())
+}
+
+export function fetchCollection(component) {
+  return fetchEndpoint(`${API_BASE_URL}/api/${component}/`)
 }
