@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { API_BASE_URL, fetchEndpoint } from '../api.js'
+import { API_BASE_URL, normalizeCollection } from '../api.js'
 
 const activityLabels = { running: 'Run', walking: 'Walk', strength: 'Strength' }
 
@@ -8,8 +8,12 @@ function Activities() {
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchEndpoint(`${API_BASE_URL}/api/activities/`)
-      .then((items) => setActivities(items))
+    fetch(`${API_BASE_URL}/api/activities/`)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Unable to load activities (${response.status})`)
+        return response.json()
+      })
+      .then((payload) => setActivities(normalizeCollection(payload)))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))
   }, [])

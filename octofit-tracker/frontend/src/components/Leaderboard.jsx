@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
-import { API_BASE_URL, fetchEndpoint } from '../api.js'
+import { API_BASE_URL, normalizeCollection } from '../api.js'
 
 function Leaderboard() {
   const [entries, setEntries] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchEndpoint(`${API_BASE_URL}/api/leaderboard/`)
-      .then((items) => setEntries(items))
+    fetch(`${API_BASE_URL}/api/leaderboard/`)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Unable to load leaderboard (${response.status})`)
+        return response.json()
+      })
+      .then((payload) => setEntries(normalizeCollection(payload)))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))
   }, [])

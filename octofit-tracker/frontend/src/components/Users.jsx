@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
-import { API_BASE_URL, fetchEndpoint } from '../api.js'
+import { API_BASE_URL, normalizeCollection } from '../api.js'
 
 function Users() {
   const [users, setUsers] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetchEndpoint(`${API_BASE_URL}/api/users/`)
-      .then((items) => setUsers(items))
+    fetch(`${API_BASE_URL}/api/users/`)
+      .then((response) => {
+        if (!response.ok) throw new Error(`Unable to load users (${response.status})`)
+        return response.json()
+      })
+      .then((payload) => setUsers(normalizeCollection(payload)))
       .catch((error) => setState({ loading: false, error: error.message }))
       .finally(() => setState((current) => ({ ...current, loading: false })))
   }, [])
