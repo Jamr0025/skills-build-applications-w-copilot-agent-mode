@@ -1,4 +1,5 @@
 import express from 'express';
+import { apiBaseUrl } from './config/api.js';
 import './config/database.js';
 import activityRoutes from './routes/activities.js';
 import leaderboardRoutes from './routes/leaderboard.js';
@@ -12,7 +13,7 @@ const port = Number(process.env.PORT || 8000);
 app.use(express.json());
 
 app.get('/api/health', (_request, response) => {
-  response.json({ status: 'ok' });
+  response.json({ status: 'ok', baseUrl: apiBaseUrl });
 });
 
 app.use('/api/users', userRoutes);
@@ -27,5 +28,5 @@ app.use((error: unknown, _request: express.Request, response: express.Response, 
 });
 
 app.listen(port, () => {
-  console.log(`OctoFit API listening on port ${port}`);
+  console.log(`OctoFit API listening on port ${port} at ${apiBaseUrl}`);
 });
