@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
-import { API_BASE_URL, normalizeCollection } from '../api.js'
+import { normalizeCollection } from '../api.js'
+
+const usersEndpoint = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/users/`
+  : 'http://localhost:8000/api/users/'
 
 function Users() {
   const [users, setUsers] = useState([])
   const [state, setState] = useState({ loading: true, error: '' })
 
   useEffect(() => {
-    fetch(`${API_BASE_URL}/api/users/`)
+    fetch(usersEndpoint)
       .then((response) => {
         if (!response.ok) throw new Error(`Unable to load users (${response.status})`)
         return response.json()
